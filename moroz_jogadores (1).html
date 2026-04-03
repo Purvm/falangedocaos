@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOROZ — Documento do Jogador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:          #060508;
+    --bg2:         #0b0a0f;
+    --panel:       #100f14;
+    --panel2:      #161420;
+    --text:        #c4b8d0;
+    --text-dim:    #5a5268;
+    --red:         #8b0000;
+    --red-bright:  #c0102a;
+    --red-glow:    rgba(192,16,42,0.35);
+    --violet:      #3a1f5e;
+    --violet-bright: #7b3fbc;
+    --violet-glow: rgba(123,63,188,0.3);
+    --acid:        #b8ff00;
+    --acid-dim:    #7aaa00;
+    --cream:       #e8dff0;
+    --border:      #1e1b28;
+    --border-bright: #2e2a3e;
+    --input-bg:    rgba(255,255,255,0.03);
+    --input-border: #2e2a3e;
+    --input-focus: #7b3fbc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  @keyframes glitch {
+    0%,90%,100% { transform: translateX(0); }
+    91% { transform: translateX(-3px); }
+    93% { transform: translateX(3px); }
+    95% { transform: translateX(0); }
+  }
+
+  /* ==================== DOC LAYOUT ==================== */
+  .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 44px 100px;
+  }
+
+  /* ==================== HEADER ==================== */
+  .doc-header {
+    text-align: center;
+    padding-bottom: 52px;
+    margin-bottom: 52px;
+    border-bottom: 1px solid var(--border-bright);
+    position: relative;
+  }
+
+  .doc-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 2px;
+    background: linear-gradient(to right, var(--red-bright), var(--violet-bright), var(--red-bright));
+  }
+
+  .doc-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--red-bright);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .doc-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(60px, 16vw, 140px);
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: 12px;
+    line-height: 0.9;
+    text-shadow:
+      0 0 40px rgba(123,63,188,0.35),
+      4px 4px 0 var(--red);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards, glitch 14s ease 4s infinite;
+  }
+
+  .doc-sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(14px, 3vw, 24px);
+    font-weight: 300;
+    color: var(--violet-bright);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-top: 14px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.8s forwards;
+  }
+
+  .doc-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(18px, 4vw, 40px);
+    font-weight: 700;
+    color: var(--red-bright);
+    letter-spacing: 3px;
+    margin-top: 8px;
+    text-shadow: 0 0 20px var(--red-glow);
+    opacity: 0;
+    animation: fadeUp 1s ease 1s forwards;
+  }
+
+  .doc-divider {
+    width: 180px; height: 1px;
+    background: linear-gradient(to right, transparent, var(--violet-bright), var(--red-bright), transparent);
+    margin: 24px auto;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.2s forwards;
+  }
+
+  .doc-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-style: normal;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.4s forwards;
+  }
+
+  /* ==================== TYPOGRAPHY ==================== */
+  h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--violet-bright);
+    margin: 50px 0 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    padding-left: 18px;
+  }
+
+  h2::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--red-bright), var(--violet-bright));
+  }
+
+  h3 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--cream);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 28px 0 12px;
+    padding-left: 14px;
+    border-left: 2px solid var(--red-bright);
+  }
+
+  p { margin-bottom: 16px; color: var(--text); }
+
+  .lead {
+    font-size: 17px;
+    color: var(--cream);
+    font-style: italic;
+    line-height: 1.85;
+    padding: 22px 28px;
+    border-left: 3px solid var(--violet-bright);
+    background: rgba(123,63,188,0.05);
+    margin-bottom: 30px;
+  }
+
+  .callout {
+    background: rgba(192,16,42,0.07);
+    border: 1px solid rgba(192,16,42,0.25);
+    padding: 18px 22px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--text);
+    font-style: italic;
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.7;
+  }
+
+  .callout strong { color: var(--red-bright); font-style: normal; }
+
+  hr { border: none; border-top: 1px solid var(--border-bright); margin: 42px 0; }
+
+  /* ==================== TIMELINE ==================== */
+  .timeline { position: relative; padding-left: 40px; margin-top: 8px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--violet-bright), var(--red-bright), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -44px; top: 8px;
+    width: 9px; height: 9px;
+    background: var(--violet-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--violet-glow);
+  }
+
+  .timeline-item.red::before { background: var(--red-bright); box-shadow: 0 0 8px var(--red-glow); }
+  .timeline-item.red .timeline-year { color: var(--red-bright); }
+
+  .timeline-year {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--violet-bright);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-text { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .timeline-text strong { color: var(--cream); }
+
+  /* ==================== DEPARTMENT CARDS ==================== */
+  .dept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 18px;
+    margin: 24px 0;
+  }
+
+  .dept-card {
+    border: 1px solid var(--border-bright);
+    background: var(--panel2);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .dept-card:hover { border-color: var(--violet-bright); }
+
+  .dept-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--red-bright), var(--violet-bright));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .dept-card:hover::before { opacity: 1; }
+
+  .dept-card-header {
+    background: var(--panel);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dept-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 2px;
+  }
+
+  .dept-unit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--red-bright);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .dept-card-body {
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .dept-skills {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--acid-dim);
+    letter-spacing: 1px;
+  }
+
+  /* ==================== CHARACTER SHEET ==================== */
+  .sheet-wrapper {
+    margin-top: 60px;
+    border: 1px solid var(--border-bright);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sheet-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--red-bright), var(--violet-bright), var(--red-bright));
+  }
+
+  .sheet-header {
+    background: linear-gradient(90deg, var(--red) 0%, var(--violet) 100%);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .sheet-header-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: 6px;
+  }
+
+  .sheet-header-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: rgba(220,200,255,0.6);
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+
+  .sheet-body {
+    background: var(--panel2);
+    padding: 36px 36px;
+  }
+
+  /* FIELD GROUPS */
+  .field-row {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.cols-1 { grid-template-columns: 1fr; }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .field-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--violet-bright);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .field-hint {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-style: normal;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  /* INPUT STYLES */
+  input[type="text"],
+  select,
+  textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--cream);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    padding: 10px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  input[type="text"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 12px rgba(123,63,188,0.2);
+  }
+
+  input[type="text"]::placeholder,
+  textarea::placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  select {
+    cursor: pointer;
+  }
+
+  select option {
+    background: var(--panel);
+    color: var(--cream);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+
+  /* DIVIDER IN SHEET */
+  .sheet-divider {
+    border: none;
+    border-top: 1px solid var(--border-bright);
+    margin: 32px 0;
+    position: relative;
+  }
+
+  .sheet-divider::after {
+    content: attr(data-label);
+    position: absolute;
+    top: -10px; left: 0;
+    background: var(--panel2);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--red-bright);
+    letter-spacing: 3px;
+    padding-right: 16px;
+  }
+
+  /* RADIO / CHECKBOX DEPT SELECTOR */
+  .dept-selector { margin: 20px 0; }
+
+  .dept-radio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .dept-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid var(--border-bright);
+    padding: 12px 16px;
+    background: var(--panel);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .dept-radio-item:hover { border-color: var(--violet-bright); }
+
+  .dept-radio-item input[type="radio"] {
+    width: 16px; height: 16px;
+    accent-color: var(--violet-bright);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .dept-radio-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  .dept-radio-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* PRINT BUTTON */
+  .print-section {
+    text-align: center;
+    margin-top: 52px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-bright);
+  }
+
+  .print-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  .btn-print {
+    background: none;
+    border: 1px solid var(--acid-dim);
+    color: var(--acid-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 5px;
+    padding: 16px 52px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 12px rgba(122, 170, 0, 0.15);
+    margin: 0 8px;
+  }
+
+  .btn-print:hover {
+    background: var(--acid-dim);
+    color: var(--bg);
+    box-shadow: 0 0 24px rgba(122,170,0,0.3);
+  }
+
+  .btn-clear {
+    background: none;
+    border: 1px solid var(--text-dim);
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    padding: 12px 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    margin: 0 8px;
+  }
+
+  .btn-clear:hover { border-color: var(--red-bright); color: var(--red-bright); }
+
+  /* DOC FOOTER */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+  }
+
+  /* ==================== PRINT STYLES ==================== */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #1a1a2e !important;
+    }
+
+    body::before { display: none !important; }
+
+    .no-print { display: none !important; }
+
+    .wrapper { padding: 20px 30px; max-width: 100%; }
+
+    .doc-eyebrow, .doc-title, .doc-sub, .doc-subtitle, .doc-note { opacity: 1 !important; animation: none !important; }
+
+    .doc-header {
+      border-bottom: 2px solid #1a1a2e;
+    }
+
+    .doc-title {
+      color: #1a1a2e !important;
+      text-shadow: none !important;
+      font-size: 80px !important;
+    }
+
+    .doc-sub, .doc-eyebrow, .doc-subtitle {
+      color: #4a4a6a !important;
+    }
+
+    .doc-note { color: #666 !important; }
+
+    h2 { color: #4a2a8a !important; break-after: avoid; }
+    h2::before { background: #4a2a8a !important; }
+    h3 { color: #1a1a2e !important; border-left-color: #c0102a !important; }
+
+    p, .timeline-text { color: #2a2a3a !important; }
+
+    .lead {
+      border-left-color: #4a2a8a !important;
+      background: #f0eef8 !important;
+      color: #1a1a2e !important;
+    }
+
+    .callout {
+      background: #fff0f2 !important;
+      border-color: #c0102a !important;
+      color: #2a2a3a !important;
+    }
+
+    .sheet-wrapper { border: 2px solid #1a1a2e !important; }
+    .sheet-wrapper::before { display: none; }
+
+    .sheet-header {
+      background: #1a1a2e !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .sheet-header-title { color: #ffffff !important; }
+    .sheet-header-sub { color: #aaaacc !important; }
+
+    .sheet-body { background: #fafafa !important; }
+
+    .field-label { color: #4a2a8a !important; }
+    .field-hint { color: #888 !important; }
+
+    input[type="text"],
+    select,
+    textarea {
+      background: #ffffff !important;
+      border: 1px solid #aaaacc !important;
+      color: #1a1a2e !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .dept-radio-item {
+      border-color: #aaaacc !important;
+      background: #f5f5f8 !important;
+    }
+
+    .dept-radio-label { color: #1a1a2e !important; }
+    .dept-radio-sub { color: #666 !important; }
+
+    .timeline::before { background: #4a2a8a !important; }
+    .timeline-item::before { background: #4a2a8a !important; }
+    .timeline-year { color: #4a2a8a !important; }
+
+    .dept-card { border-color: #aaaacc !important; background: #f5f5f8 !important; }
+    .dept-card-header { background: #eeeef5 !important; }
+    .dept-name { color: #1a1a2e !important; }
+    .dept-unit { color: #c0102a !important; }
+    .dept-card-body { color: #2a2a3a !important; }
+    .dept-skills { color: #4a8a00 !important; border-top-color: #aaaacc !important; }
+
+    .sheet-divider::after { background: #fafafa !important; color: #c0102a !important; }
+
+    .print-section, .btn-print, .btn-clear { display: none !important; }
+
+    .doc-footer { color: #888 !important; border-top-color: #aaaacc !important; }
+
+    * { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .wrapper { padding: 32px 20px 60px; }
+    .field-row.cols-2 { grid-template-columns: 1fr; }
+    .field-row.cols-3 { grid-template-columns: 1fr; }
+    .dept-grid { grid-template-columns: 1fr; }
+    .dept-radio-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-eyebrow">Documento do Jogador — RPG de Mesa</div>
+    <div class="doc-title">MOROZ</div>
+    <div class="doc-sub">Nova Iorque · 1999–2000</div>
+    <div class="doc-subtitle">A CIDADE QUE APODRECEU POR DENTRO</div>
+    <div class="doc-divider"></div>
+    <div class="doc-note">Este documento contém o que seu personagem sabe. O que está além disso é o que você vai descobrir na mesa. Não há resposta certa. Só consequências.</div>
+  </div>
+
+  <!-- CONTEXTO DO JOGADOR -->
+  <h2>O Que Você Sabe</h2>
+
+  <p class="lead">Nova Iorque, outubro de 1999. A cidade nunca limpou as ruas. O crime não desapareceu — foi reorganizado. O metrô ainda tem os grafites dos anos 80. Os bairros do Bronx cheiram a borracha queimada quando o vento vem do norte. Você trabalha aqui faz anos. Já viu o suficiente para saber que as coisas estão erradas de formas que vão além de um caso específico.</p>
+
+  <p>Você é policial da NYPD. Você tem seu departamento, seus contatos, seus vícios, suas linhas que não cruzaria — e uma ou duas que já cruzou. No dia 19 de outubro de 1999, você recebeu uma ordem de comparecimento rotineira para o 1847 Webster Avenue, Bronx, às 14h30. Motivo: suspeita de laboratório de entorpecentes.</p>
+
+  <p>O que aconteceu naquele apartamento mudou o rumo da sua carreira. O que você ainda não sabe é o que está realmente em jogo.</p>
+
+  <div class="callout">
+    <strong>Nota:</strong> Este documento não revela a conspiração por trás da campanha. Tudo que está aqui é o que um policial honesto de Nova Iorque saberia em outubro de 1999. O resto você descobre na mesa — e vai custar.
+  </div>
+
+  <hr>
+
+  <!-- O MUNDO -->
+  <h2>Nova Iorque — O Que Você Respira Todo Dia</h2>
+
+  <p>Não há grandes revelações no cotidiano desta cidade. Só a acumulação de coisas que você aprendeu a ignorar porque a alternativa é enlouquecer.</p>
+
+  <h3>A Polícia</h3>
+  <p>A NYPD tem 38.000 policiais, 77 distritos, e uma cultura de silêncio que antecede qualquer caso específico. O Muro Azul não é metáfora — é prática. Um policial que fala contra outro policial vira inimigo de todos os outros. Você aprendeu isso cedo. Sabe o que custa ignorar e o que custa falar. Nenhum dos dois é grátis.</p>
+  <p>O Comissário Dusk tem a reputação de homem duro que limpa o que está sujo. Há policiais que acreditam nisso. Os veteranos que trabalharam em distritos do Bronx nos anos 90 falam menos sobre Dusk do que sobre qualquer outro comissário da memória recente. Isso pode ser respeito. Pode ser outra coisa.</p>
+
+  <h3>O Crime Organizado</h3>
+  <p>Nova Iorque tem três famílias italianas com presença real: os Calabrese (Queens / Harlem), os Marotti (Harlem norte) e os De Filippo (docas de Brooklyn). Nos anos 80, eles eram o problema. Nos anos 90, ficaram mais quietos — mas não menores. Quando uma organização criminal fica quieta sem perder território, é porque fechou um acordo com alguém. Você aprendeu isso no trabalho.</p>
+  <p>A organização russa de Brighton Beach opera nas docas e no mercado de armas. Pavel Zhigarev é o nome que aparece nos arquivos, mas nunca preso. O Tong do Dragão Vermelho controla Chinatown com disciplina que a polícia respeita de longe. Os albaneses de Krasniqi são mais novos, mais barulhentos, e com menos raízes — o tipo de organização que cresce rápido e contrai com violência quando pressionada.</p>
+
+  <h3>O NULO — O Que Todo Policial Nota</h3>
+  <p>Desde 1997, o produto que chegou ao Bronx é diferente. Não mata com abstinência. Não deixa os usuários agitados ou paranóicos. Os usuários de NULO continuam funcionando — trabalham, falam, comem — mas ficam diferentes de um jeito difícil de nomear no relatório. Passivos. Como se a urgência de reagir a qualquer coisa tivesse sido desligada.</p>
+  <p>Os policiais que notaram isso e tentaram investigar tiveram os casos fechados por cima. Isso você talvez já saiba — ou talvez seja a primeira vez que está juntando os pontos.</p>
+
+  <h3>A SRD — O Que Todo Mundo Sabe</h3>
+  <p>A Seção de Remanejamento e Disciplina é a lixeira da NYPD. Policiais vão para lá por duas razões: cometeram algo que precisa ser monitorado de perto, ou viram algo que precisa ser mantido longe dos outros departamentos. Os dois não se excluem. Quem comanda é o Tenente Kowalski — um homem de 54 anos que nunca foi promovido além de tenente, nunca foi investigado, e nunca disse nada inconveniente em voz alta. Acima dele há hierarquia que os que chegam à SRD preferem não conhecer.</p>
+
+  <hr>
+
+  <!-- CONTEXTO DA CIDADE -->
+  <h2>A Cidade — O Que Todo Policial Sabe</h2>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-year">OS ANOS 80</div>
+      <div class="timeline-text">O crack chegou ao Bronx em 86. Em dezoito meses estava em todo lugar. As famílias italianas perderam território para grupos locais. Guerra de rua de 87. A NYPD usou o caos para pedir orçamento. O orçamento foi para outro lugar.</div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1993</div>
+      <div class="timeline-text"><strong>Gordon Lash</strong> vence a prefeitura. Promete ordem. O comissário <strong>Raymond Dusk</strong> é nomeado meses depois. Alguns policiais ficam entusiasmados. Os veteranos ficam quietos.</div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1995</div>
+      <div class="timeline-text">A <strong>Igreja do Voluntário</strong> abre o primeiro centro comunitário no Bronx. Em dois anos, mais de trinta centros. Boa imprensa. Muita comida. Muita ajuda genuína. Financiamento que ninguém rastreou.</div>
+    </div>
+
+    <div class="timeline-item red">
+      <div class="timeline-year">1997</div>
+      <div class="timeline-text">Uma droga chamada <strong>NULO</strong> aparece no mercado. Barata. Não mata com abstinência — o que é incomum. Os usuários continuam funcionando, mas ficam... diferentes. Difícil de nomear. Alguns policiais notaram. Ninguém teve resposta.</div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1998</div>
+      <div class="timeline-text">Série de desaparecimentos no South Bronx e East Harlem. Maioria: moradores sem documentos, ex-presidiários, pessoas sem família próxima. Os casos chegam em distritos diferentes. Ninguém cruzou os dados ainda.</div>
+    </div>
+
+    <div class="timeline-item red">
+      <div class="timeline-year">19 DE OUTUBRO DE 1999</div>
+      <div class="timeline-text">Você recebe a ordem de comparecimento. 1847 Webster Avenue. Bronx. 14h30. O que acontece depois muda tudo.</div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- BAIRROS -->
+  <h2>A Cidade — Bairros que Importam</h2>
+
+  <div class="dept-grid">
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">SOUTH BRONX</div>
+        <div class="dept-unit">NULO circula livremente / alta tensão</div>
+      </div>
+      <div class="dept-card-body">Quatro décadas de desinvestimento. Edifícios meio demolidos ao lado de outros com moradores. A Igreja tem cinco centros aqui. Os que ficaram, ficaram por falta de opção ou amor ao lugar. Às vezes os dois.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">HARLEM</div>
+        <div class="dept-unit">Disputado / tensão de território</div>
+      </div>
+      <div class="dept-card-body">Tensão entre organizações italianas e grupos dominicanos. Dois policiais comprados no 28º Distrito — todo mundo sabe, ninguém prova. É onde padrões começam a aparecer para quem olha com atenção.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">CHINATOWN</div>
+        <div class="dept-unit">Tong do Dragão Vermelho / ordem rígida</div>
+      </div>
+      <div class="dept-card-body">Mão firme de uma organização que prefere não aparecer nos relatórios. Baixa taxa de crime visível. A polícia não entra sem motivo. Os que tentaram em 1996 saíram em maca.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">HELL'S KITCHEN</div>
+        <div class="dept-unit">Conflito ativo / zona perigosa</div>
+      </div>
+      <div class="dept-card-body">Albaneses expandiram para cá em 1998 e encontraram resistência. A zona de conflito é real. Todo bar entre as Avenidas 9 e 10 tem algo embaixo do balcão.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">MIDTOWN</div>
+        <div class="dept-unit">Corporativo / NYPD oficial</div>
+      </div>
+      <div class="dept-card-body">O andar de cima da cidade. O <strong>Grupo Meridian</strong> tem sua sede aqui — 32 andares de vidro escuro na Sixth Avenue. Câmeras em cada esquina. Parece seguro. Depende do que você carrega.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">LOWER EAST SIDE</div>
+        <div class="dept-unit">Descentralizado / subcultura</div>
+      </div>
+      <div class="dept-card-body">Onde a cidade ainda tem pulso próprio. Bares até as quatro da manhã. Artistas ao lado de traficantes ao lado de técnicos de computador. O lugar mais difícil de vigiar porque a vigia parece natural.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">WASHINGTON HEIGHTS</div>
+        <div class="dept-unit">Los Muertos Vivos / território consolidado</div>
+      </div>
+      <div class="dept-card-body">Comunidade dominicana com economia própria. NULO tentou entrar aqui em 1998. Não voltou. A polícia aparece quando chamada e não fica mais que o necessário.</div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">BROOKLYN — RED HOOK</div>
+        <div class="dept-unit">Porto / Organizatsiya Russa</div>
+      </div>
+      <div class="dept-card-body">Armazéns, óleo, maresia. A organização russa de <strong>Pavel "O Contador" Zhigarev</strong> controla as docas. Contêineres que chegam de noite e saem de manhã sem registro. Há gente aqui que sabe coisas que não estão em arquivo nenhum.</div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- DEPARTAMENTOS -->
+  <h2>Os Departamentos — Onde Cada Policial Vem</h2>
+
+  <p>Você é policial da NYPD em outubro de 1999. Cada jogador vem de um departamento diferente. Os departamentos abaixo são os pontos de partida disponíveis.</p>
+
+  <div class="dept-grid">
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">HOMICÍDIOS</div>
+        <div class="dept-unit">44º Distrito — South Bronx</div>
+      </div>
+      <div class="dept-card-body">
+        O 44º fica no coração do South Bronx. Detetive de homicídios aqui conhece o bairro pelos mortos — sabe onde as famílias moram, quem tem pendência com quem, os nomes que aparecem em relatórios com dez anos de distância.
+        <div class="dept-skills">▸ Cenas de crime · Interrogatório · Padrões entre casos · Contatos em múltiplos distritos</div>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">VICE</div>
+        <div class="dept-unit">Setor Norte de Manhattan — Harlem / Heights</div>
+      </div>
+      <div class="dept-card-body">
+        Cobre o que a lei proíbe e o mercado não para de oferecer. Trabalha com disfarce, informantes, acordos fora dos relatórios. Conhece a cidade pela lateral — pelos bares às três da manhã. O NULO chegou aqui em 1997. Algo está errado com esse produto.
+        <div class="dept-skills">▸ Informantes · Disfarce · Mercado de drogas · Infiltração · Contatos dos dois lados</div>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">UNIDADE DE SERVIÇO DE EMERGÊNCIA</div>
+        <div class="dept-unit">Manhattan — Operações Táticas</div>
+      </div>
+      <div class="dept-card-body">
+        O que a NYPD aciona quando a situação saiu do controle convencional. Reféns, intervenções armadas, resgate hostil. Entra em lugares que outros policiais não entram. Uma verificação de denúncia no Bronx não é o tipo de ordem que chega para um policial da USE.
+        <div class="dept-skills">▸ Combate · Tática · Equipamento especializado · Operações noturnas · Resistência física</div>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">CRIME ORGANIZADO</div>
+        <div class="dept-unit">Unidade de Investigação — Manhattan Sul</div>
+      </div>
+      <div class="dept-card-body">
+        Investiga famílias, tongs, organizações. Conhece as estruturas de poder melhor que a maioria dos criminosos. Trabalha em prazos de anos. Três anos montando um caso e vendo ser arquivado por interferência política faz coisas específicas com um investigador.
+        <div class="dept-skills">▸ Hierarquias do crime · Dossiês · Navegar entre gangues · Entender poder e dívida</div>
+      </div>
+    </div>
+
+    <div class="dept-card">
+      <div class="dept-card-header">
+        <div class="dept-name">ASSUNTOS INTERNOS</div>
+        <div class="dept-unit">Divisão de Integridade — NYPD</div>
+      </div>
+      <div class="dept-card-body">
+        O departamento mais odiado dentro da própria instituição. Investigam policiais corruptos. Vivem num isolamento específico. Quando percebem que o que encontraram aponta para dentro da NYPD, não ficam surpresos — ficam com medo de quantos níveis sobe.
+        <div class="dept-skills">▸ Procedimentos internos · Identificar corrupção · Dossiês de oficiais · Entender como o sistema se protege</div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- FICHA DE PERSONAGEM -->
+  <div class="sheet-wrapper">
+    <div class="sheet-header">
+      <div>
+        <div class="sheet-header-title">FICHA DO PERSONAGEM</div>
+        <div class="sheet-header-sub">MOROZ — Nova Iorque 1999 · Preencha e imprima para o mestre</div>
+      </div>
+    </div>
+
+    <div class="sheet-body">
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="field-row cols-2">
+        <div class="field-group">
+          <div class="field-label">Nome completo</div>
+          <input type="text" id="f-nome" placeholder="Nome e sobrenome do personagem" />
+        </div>
+        <div class="field-group">
+          <div class="field-label">Apelido / Alcunha</div>
+          <input type="text" id="f-apelido" placeholder="Se tiver um — opcional" />
+        </div>
+      </div>
+
+      <div class="field-row cols-3">
+        <div class="field-group">
+          <div class="field-label">Idade</div>
+          <input type="text" id="f-idade" placeholder="ex: 36 anos" />
+        </div>
+        <div class="field-group">
+          <div class="field-label">Tempo na NYPD</div>
+          <input type="text" id="f-tempo" placeholder="ex: 11 anos" />
+        </div>
+        <div class="field-group">
+          <div class="field-label">Patente atual</div>
+          <input type="text" id="f-patente" placeholder="ex: Detetive 2ª Classe" />
+        </div>
+      </div>
+
+      <!-- DEPARTAMENTO -->
+      <hr class="sheet-divider" data-label="DEPARTAMENTO">
+
+      <div class="field-group dept-selector">
+        <div class="field-label">Departamento de origem — escolha um</div>
+        <div class="dept-radio-grid">
+          <label class="dept-radio-item">
+            <input type="radio" name="dept" value="Homicídios — 44º Distrito" />
+            <div>
+              <div class="dept-radio-label">Homicídios</div>
+              <span class="dept-radio-sub">44º Distrito, South Bronx</span>
+            </div>
+          </label>
+          <label class="dept-radio-item">
+            <input type="radio" name="dept" value="Vice — Setor Norte de Manhattan" />
+            <div>
+              <div class="dept-radio-label">Vice</div>
+              <span class="dept-radio-sub">Setor Norte de Manhattan</span>
+            </div>
+          </label>
+          <label class="dept-radio-item">
+            <input type="radio" name="dept" value="Unidade de Serviço de Emergência" />
+            <div>
+              <div class="dept-radio-label">USE</div>
+              <span class="dept-radio-sub">Unidade de Serviço de Emergência</span>
+            </div>
+          </label>
+          <label class="dept-radio-item">
+            <input type="radio" name="dept" value="Crime Organizado — Manhattan Sul" />
+            <div>
+              <div class="dept-radio-label">Crime Organizado</div>
+              <span class="dept-radio-sub">Unidade de Investigação</span>
+            </div>
+          </label>
+          <label class="dept-radio-item">
+            <input type="radio" name="dept" value="Assuntos Internos — NYPD" />
+            <div>
+              <div class="dept-radio-label">Assuntos Internos</div>
+              <span class="dept-radio-sub">Divisão de Integridade</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <hr class="sheet-divider" data-label="HISTÓRICO">
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">De onde veio</div>
+          <div class="field-hint">Onde cresceu. Se é de Nova Iorque, qual bairro. O que o trouxe até a polícia.</div>
+          <textarea id="f-origem" placeholder="Escreva aqui..."></textarea>
+        </div>
+      </div>
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">O que está perdendo — ou já perdeu</div>
+          <div class="field-hint">Um relacionamento, a saúde, uma convicção, alguém específico. Não precisa ser dramático — pode ser silencioso. Mas precisa ser real.</div>
+          <textarea id="f-perda" placeholder="Escreva aqui..."></textarea>
+        </div>
+      </div>
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">Um contato fora do sistema oficial</div>
+          <div class="field-hint">Alguém que o personagem conhece que não apareceria bem num relatório: um informante, alguém do outro lado da lei, um jornalista, um médico que faz perguntas inconvenientes. Nome e como se conheceram.</div>
+          <textarea id="f-contato" placeholder="Escreva aqui..."></textarea>
+        </div>
+      </div>
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">O que sabe sobre o Bronx e o NULO</div>
+          <div class="field-hint">Não é obrigatório saber algo específico — mas se souber, o quê? Rumores de rua, casos que passaram pela mão, alguém que usava e mudou de comportamento.</div>
+          <textarea id="f-nulo" placeholder="Escreva aqui — ou deixe em branco se o personagem não sabe nada..."></textarea>
+        </div>
+      </div>
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">Por que ainda é policial</div>
+          <div class="field-hint">Não a resposta da cartilha. A resposta real — o que ainda o mantém entrando todo dia.</div>
+          <textarea id="f-porque" placeholder="Escreva aqui..."></textarea>
+        </div>
+      </div>
+
+      <!-- LIMITES -->
+      <hr class="sheet-divider" data-label="LINHAS">
+
+      <div class="field-row cols-2">
+        <div class="field-group">
+          <div class="field-label">Uma coisa que não faria</div>
+          <div class="field-hint">Uma linha que não cruzaria, independente da pressão.</div>
+          <textarea id="f-nao-faria" placeholder="Escreva aqui..."></textarea>
+        </div>
+        <div class="field-group">
+          <div class="field-label">Uma que faria se precisasse</div>
+          <div class="field-hint">Uma que já cruzou ou cruzaria sob pressão suficiente. Sem julgamento.</div>
+          <textarea id="f-faria" placeholder="Escreva aqui..."></textarea>
+        </div>
+      </div>
+
+      <!-- NOTAS ADICIONAIS -->
+      <hr class="sheet-divider" data-label="NOTAS ADICIONAIS">
+
+      <div class="field-row cols-1">
+        <div class="field-group">
+          <div class="field-label">Qualquer coisa mais que o mestre deve saber</div>
+          <div class="field-hint">Detalhes extras, conexões, segredos, o que quiser adicionar ao personagem.</div>
+          <textarea id="f-notas" style="min-height:110px;" placeholder="Escreva aqui — opcional..."></textarea>
+        </div>
+      </div>
+
+    </div><!-- end sheet-body -->
+  </div><!-- end sheet-wrapper -->
+
+  <!-- PRINT SECTION -->
+  <div class="print-section no-print">
+    <p class="print-note">
+      Preencha os campos acima.<br>
+      Use o botão abaixo para copiar sua ficha como texto — cole num e-mail ou documento e mande para o Mestre.
+    </p>
+    <button class="btn-print" onclick="copiarFicha()">▸ Copiar Ficha para Enviar</button>
+    <button class="btn-clear" onclick="limparFicha()">Limpar tudo</button>
+    <div id="copy-feedback" style="display:none; margin-top:16px; font-family:'Share Tech Mono',monospace; font-size:12px; color:var(--acid-dim); letter-spacing:2px;">▸ Ficha copiada. Cole no e-mail ou documento e envie ao Mestre.</div>
+  </div>
+
+  <div class="doc-footer">
+    <span>MOROZ — DOCUMENTO DO JOGADOR</span>
+    <span>USE PARA CRIAR SEU HISTÓRICO</span>
+  </div>
+
+</div><!-- end wrapper -->
+
+<script>
+  function limparFicha() {
+    if (!confirm('Limpar todos os campos? Isso não pode ser desfeito.')) return;
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+    // Clear localStorage
+    fields.forEach(id => localStorage.removeItem('moroz_' + id));
+    localStorage.removeItem('moroz_dept');
+  }
+
+  function copiarFicha() {
+    const get = id => (document.getElementById(id) || {}).value || '—';
+    const dept = (() => {
+      const checked = document.querySelector('input[name="dept"]:checked');
+      return checked ? checked.value : '(não selecionado)';
+    })();
+
+    const texto = [
+      '════════════════════════════════════',
+      '         MOROZ — FICHA DO PERSONAGEM',
+      '         Nova Iorque · 1999',
+      '════════════════════════════════════',
+      '',
+      '[ IDENTIFICAÇÃO ]',
+      `Nome: ${get('f-nome')}`,
+      `Apelido: ${get('f-apelido')}`,
+      `Idade: ${get('f-idade')}`,
+      `Tempo na NYPD: ${get('f-tempo')}`,
+      `Patente: ${get('f-patente')}`,
+      '',
+      '[ DEPARTAMENTO ]',
+      `${dept}`,
+      '',
+      '[ HISTÓRICO ]',
+      `De onde veio:\n${get('f-origem')}`,
+      '',
+      `O que está perdendo (ou já perdeu):\n${get('f-perda')}`,
+      '',
+      `Um contato fora do sistema:\n${get('f-contato')}`,
+      '',
+      `O que sabe sobre o Bronx e o NULO:\n${get('f-nulo')}`,
+      '',
+      `Por que ainda é policial:\n${get('f-porque')}`,
+      '',
+      '[ LINHAS ]',
+      `Uma coisa que não faria:\n${get('f-nao-faria')}`,
+      '',
+      `Uma que faria se precisasse:\n${get('f-faria')}`,
+      '',
+      '[ NOTAS ADICIONAIS ]',
+      `${get('f-notas')}`,
+      '',
+      '════════════════════════════════════',
+    ].join('\n');
+
+    navigator.clipboard.writeText(texto).then(() => {
+      const fb = document.getElementById('copy-feedback');
+      fb.style.display = 'block';
+      setTimeout(() => { fb.style.display = 'none'; }, 5000);
+    }).catch(() => {
+      // Fallback: open in new window
+      const w = window.open('', '_blank');
+      w.document.write('<pre style="font-family:monospace;padding:32px;white-space:pre-wrap;">' + texto + '</pre>');
+      w.document.close();
+    });
+  }
+
+  // Auto-save to localStorage
+  const fields = ['f-nome','f-apelido','f-idade','f-tempo','f-patente',
+    'f-origem','f-perda','f-contato','f-nulo','f-porque','f-nao-faria','f-faria','f-notas'];
+
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const saved = localStorage.getItem('moroz_' + id);
+    if (saved) el.value = saved;
+    el.addEventListener('input', () => localStorage.setItem('moroz_' + id, el.value));
+  });
+
+  // Radio save/restore
+  const savedDept = localStorage.getItem('moroz_dept');
+  if (savedDept) {
+    document.querySelectorAll('input[name="dept"]').forEach(r => {
+      if (r.value === savedDept) r.checked = true;
+    });
+  }
+  document.querySelectorAll('input[name="dept"]').forEach(r => {
+    r.addEventListener('change', () => localStorage.setItem('moroz_dept', r.value));
+  });
+</script>
+
+</body>
+</html>
